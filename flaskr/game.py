@@ -38,7 +38,7 @@ class Game:
             return -1
 
         #Move is valid, play it
-        self.board.play_piece(piece_name, coordinate, rotation, self.player, self.board)
+        self.board.play_piece(piece_name, coordinate, rotation, self.player, self.board, self.turn)
         #TODO: update player's inventory
         self.update_player()
         self.turn += 1 

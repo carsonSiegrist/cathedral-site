@@ -20,13 +20,18 @@ Note the abbey and academy are different for dark/light player.
 
 
 #WIP! #TODO: Implement inventory functionality for each player
-class Pieces: 
+from copy import copy
 
-    
+class Inventory: 
+
+    #Each piece that a player could have access to. 
     pieces = {  
-        "tavern"        : [(0,0)],
-        "stable"        : [(0,0), (0, 1)],
-        "inn"           : [(0,0), (0,1), (1,1)],
+        "tavern-1"        : [(0,0)],
+        "tavern-2"        : [(0,0)],
+        "stable-1"        : [(0,0), (0, 1)],
+        "stable-2"        : [(0,0), (0, 1)],
+        "inn-1"           : [(0,0), (0,1), (1,1)],
+        "inn-2"           : [(0,0), (0,1), (1,1)],
         "bridge"        : [(0,0), (0,1), (0,2)],
         "square"        : [(0,0), (0,1), (1,0), (1,1)],
         "abbey-dark"    : [(0,0), (0,1), (-1,1), (-1,2)],
@@ -42,36 +47,37 @@ class Pieces:
 
     #PRE: piece name passed 
     #POST: Returns a list of tuples containing piece data, or -1 on invalid input.
-    def getPieceData(self, piece):
-        if piece not in Pieces.pieces.keys():
-            return -1
-        return Pieces.pieces[piece]
+    @staticmethod
+    def getPieceData(piece):
+        if piece not in Inventory.pieces.keys():
+            raise ValueError("Invalid piece in getPieceData()")
+        return copy(Inventory.pieces[piece])
+
 
     #Pre valid piece and rotation passed. (rotation 0-3 inclusive)
-    def rotatePiece(self, piece, rotation):
-        output = self.getPieceData(piece)
-        
-        if output == -1:
-            return output
-        
+    @staticmethod
+    def rotatePiece(piece, rotation):     
+
+        output = Inventory.getPieceData(piece)
         match rotation:
             case 0:
                 #no rotation requested
                 return output
             case 1:
-                for i, x, y in enumerate(output):
-                    output[i][0] = -y
-                    output[i][1] = x
+                for i, coord in enumerate(output):
+                    x, y = coord
+                    output[i] = (-y, x)
                 return output
             case 2:
-                for i, x, y in enumerate(output):
-                    output[i][0] = -x
-                    output[i][1] = -y
+                for i, coord in enumerate(output):
+                    x, y = coord
+                    output[i] = (-x, -y)
                 return output
             case 3:
-                for i, x, y in enumerate(output):
-                    output[i][0] = y
-                    output[i][1] = -x
+                for i, coord in enumerate(output):
+                    x, y = coord
+                    output[i] = (y, -x)
                 return output        
+            
             case _: #default case
-                return -1
+                raise ValueError("invalid rotation value in rotatePiece()")
