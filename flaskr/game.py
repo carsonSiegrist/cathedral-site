@@ -12,11 +12,14 @@ import json
 class Game:
     
 
-    #Create board object, return the array representation of it. 
-    def start_game(self):
+    #Create board object
+    def __init__(self):
         self.turn = 0
         self.player = 1
         self.board = Board()
+
+    #returns current board
+    def get_board(self):
         return self.board.board
     
     #PRE: Valid move data passed as JSON. Board object initialized 
@@ -34,11 +37,11 @@ class Game:
 
         #TODO: check player's inventory before playing piece
 
-        if not self.board.is_playable(piece_name, coordinate, rotation, self.player, self.board):
-            return -1
+        if not self.board.is_playable(piece_name, coordinate, rotation, self.player):
+            raise ValueError("Error: Illegal move submitted to play_move()")
 
         #Move is valid, play it
-        self.board.play_piece(piece_name, coordinate, rotation, self.player, self.board)
+        self.board.play_piece(piece_name, coordinate, rotation, self.player, self.turn)
         #TODO: update player's inventory
         self.update_player()
         self.turn += 1 

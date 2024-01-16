@@ -6,12 +6,19 @@ app = Flask(__name__, static_url_path='/static')
 
 @app.route('/')
 def home():
-    current_route = request.path
-    return render_template("index.html", current_route = str(current_route))
-
+    title = "Cathedral"
+    content = "Hello world!"
+    return render_template("index.html", title=title, content=content)
 
 # API for starting a new game
-@app.route('/get_board', methods=['GET'])
+@app.route('/start_game')
+def start_game():
+    game = Game()
+    game.start_game()
+    return game.get_board()
+
+#API for getting the current board
+@app.route('/get_board', methods = ['GET'])
 def get_board():
     #create a board object
     #return board state as .json 
