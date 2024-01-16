@@ -2,22 +2,31 @@ from flask import Flask, render_template, jsonify, request
 from game import Game
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 @app.route('/')
 def home():
-    title = "Cathedral"
-    content = "Hello world!"
-    return render_template("index.html", title=title, content=content)
+    current_route = request.path
+    return render_template("index.html", current_route = str(current_route))
 
 
 # API for starting a new game
-@app.route('/get_board', methods = ['GET'])
+@app.route('/get_board', methods=['GET'])
 def get_board():
     #create a board object
     #return board state as .json 
-    current_board = Game.startGame()
-    return jsonify(current_board)
+    return jsonify([
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+    ])
 
 #API for playing a move
 #Returns current board state

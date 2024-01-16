@@ -8,7 +8,7 @@ Including initializing board, updating board when play, and handling win conditi
 """
 
 from enum import Enum
-from inventory import rotatePiece
+from inventory import Pieces
 
 class TileState(Enum):
     Unoccupied = 0
