@@ -66,20 +66,40 @@ class Inventory:
         
         return
     
+    #returns number of pieces a player has
+    def __len__(self):
+        return len(self.inventory)
+    
+    
+    #returns boolean, if player has the given piece
     def has_piece(self, piece):
         return piece in self.inventory
     
+    #remove a piece from player's inventory. player must have piece to remove it
     def remove_piece(self, piece):
         if piece not in self.inventory:
             raise RuntimeError("Cannot remove piece, inventory does not contain it")
         else:
             self.inventory.remove(piece)
 
+    #add a piece to a player's inventory. cannot add a piece player already has1
     def add_piece(self, piece):
         if piece in self.inventory:
             raise RuntimeError("Cannot give piece, player already has it")
         else:
             self.inventory.add(piece)
+
+    #return player's inventory
+    def get_inv(self):
+        return self.inventory
+
+    #return the sum of the size of each piece in the player's inventory
+    #used for calculating winner 
+    def get_size(self):
+        sum = 0
+        for piece in self.inventory:
+            sum += len(self.get_piece_data(piece))
+        return sum
 
     #PRE: piece name passed 
     #POST: Returns a list of tuples containing piece data, or -1 on invalid input.
