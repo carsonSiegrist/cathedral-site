@@ -287,3 +287,13 @@ class Board:
 
         return coordinates
 
+    #Convert board object into a list with each element being a list structured as [state, piece]
+    #For jsonification 
+    def get_board_lst(self):
+        out = []
+        for row in self.board:
+            row_lst = []
+            for tile in row:
+                row_lst.append([tile.state.value, tile.piece])
+            out.append(row_lst)
+        return out

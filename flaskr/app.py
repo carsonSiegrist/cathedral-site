@@ -12,13 +12,11 @@ def home():
     return render_template("index.html", title=title, content=content)
 
 # API for starting a new game
-@app.route('/start_game')
+@app.route('/start_game', methods = ['POST'])
 def start_game():
     game = Game()
     game.start_game()
-    board = game.get_board()
-    board_dict = {"board" : str(board)}
-    return jsonify(board_dict)
+    return 
 
 #API for getting the current board
 @app.route('/get_board', methods = ['GET'])
@@ -26,7 +24,7 @@ def get_board():
     if not game:
         raise RuntimeError("Game not started. Call /start_game first.")
     board = game.get_board()
-    board_dict = {"board" : board}
+    board_dict = {"board" : board.get_board_lst()}
     return jsonify(board_dict)
 
 #API for playing a move
