@@ -10,8 +10,14 @@ def home():
     content = "Hello world!"
     return render_template("index.html", title=title, content=content)
 
-
 # API for starting a new game
+@app.route('/start_game')
+def start_game():
+    game = Game()
+    game.start_game()
+    return game.get_board()
+
+#API for getting the current board
 @app.route('/get_board', methods = ['GET'])
 def get_board():
     #create a board object

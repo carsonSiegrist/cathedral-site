@@ -25,7 +25,7 @@ from copy import copy
 class Inventory: 
 
     #Each piece that a player could have access to. 
-    pieces = {  
+    piece_data = {  
         "tavern-1"        : [(0,0)],
         "tavern-2"        : [(0,0)],
         "stable-1"        : [(0,0), (0, 1)],
@@ -45,38 +45,75 @@ class Inventory:
         "cathedral"     : [(0,0),(0,1),(0,2),(0,3),(1,1),(-1,1)]
     }
 
+    def __init__(self, player):
+        #dark and light have different pieces. 
+        #need to determine which inventory to give them
+        self.inventory = set(self.piece_data.keys()) #inventory is a set, a player can only have one of each peice. 
+        
+        if player == 1:
+            self.inventory.remove("abbey-dark")
+            self.inventory.remove("academy-dark")
+            self.inventory.remove("cathedral")
+        
+        elif player == 2:
+            self.inventory.remove("abbey-light")
+            self.inventory.remove("academy-light")
+            self.inventory.remove("cathedral")
+
+        
+        else:
+            raise ValueError("Invalid player number supplied for Inventory object")
+        
+        return
+    
+    def has_piece(self, piece):
+        return piece in self.inventory
+    
+    def remove_piece(self, piece):
+        if piece not in self.inventory:
+            raise RuntimeError("Cannot remove piece, inventory does not contain it")
+        else:
+            self.inventory.remove(piece)
+
+    def add_piece(self, piece):
+        if piece in self.inventory:
+            raise RuntimeError("Cannot give piece, player already has it")
+        else:
+            self.inventory.add(piece)
+
     #PRE: piece name passed 
     #POST: Returns a list of tuples containing piece data, or -1 on invalid input.
     @staticmethod
-    def getPieceData(piece):
-        if piece not in Inventory.pieces.keys():
+    def get_piece_data(piece):
+        if piece not in Inventory.piece_data.keys():
             raise ValueError("Invalid piece in getPieceData()")
-        return copy(Inventory.pieces[piece])
+        return copy(Inventory.piece_data[piece])
 
 
     #Pre valid piece and rotation passed. (rotation 0-3 inclusive)
     @staticmethod
-    def rotatePiece(piece, rotation):     
+    def rotate_piece(piece, rotation):     
 
-        output = Inventory.getPieceData(piece)
+
+        output = Inventory.get_piece_data(piece)
+        #clockwise
         match rotation:
-            case 0:
-                #no rotation requested
+            case 0: #0 degrees
                 return output
-            case 1:
+            case 1: #90 degrees
                 for i, coord in enumerate(output):
                     x, y = coord
-                    output[i] = (-y, x)
+                    output[i] = (y, -x)
                 return output
-            case 2:
+            case 2: #180 degrees
                 for i, coord in enumerate(output):
                     x, y = coord
                     output[i] = (-x, -y)
                 return output
-            case 3:
+            case 3: #270 degrees
                 for i, coord in enumerate(output):
                     x, y = coord
-                    output[i] = (y, -x)
+                    output[i] = (-y, x)
                 return output        
             
             case _: #default case
