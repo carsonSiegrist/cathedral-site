@@ -170,7 +170,7 @@ class Board:
                     seen.add((c,r))
                     curr_seen.add((c,r))
                     if self.board[c][r].state in enemy_states:
-                        pass_piece = board.board[c][r].piece
+                        pass_piece = self.board[c][r].piece
                     while q:
                         coords = q.pop()
                         neighbors = self.generate_neighbors(coords)
@@ -181,7 +181,7 @@ class Board:
                                 continue                        
 
                             x, y = neighbor
-                            curr_tile = board.board[y][x]
+                            curr_tile = self.board[y][x]
                             curr_state = curr_tile.state
                             curr_piece = curr_tile.piece
 
