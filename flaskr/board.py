@@ -122,7 +122,7 @@ class Board:
 
                 curr_tile.setState(player_zone_state)
 
-
+        print(self.board)
         return
     
     #Helper function to play_move
@@ -279,7 +279,7 @@ class Board:
     #Converts relative piece coordinates to actual coordinates on the board.
     #POST: Returns -1 if coordinates cannot be generated, otherwise returns a list of coordinates stored as tuples. 
     def generate_coordinates(self, piece, coord, rotation):
-        coordinates = Inventory.rotatePiece(piece, rotation) #gives coordinates relative to central "coord"
+        coordinates = Inventory.rotate_piece(piece, rotation) #gives coordinates relative to central "coord"
         cen_x, cen_y = coord #central x and y
         for i, coords in enumerate(coordinates):
             x, y = coords
@@ -297,3 +297,4 @@ class Board:
                 row_lst.append([tile.state.value, tile.piece])
             out.append(row_lst)
         return out
+    

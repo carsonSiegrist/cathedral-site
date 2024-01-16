@@ -53,7 +53,6 @@ class Inventory:
         if player == 1:
             self.inventory.remove("abbey-dark")
             self.inventory.remove("academy-dark")
-            self.inventory.remove("cathedral")
         
         elif player == 2:
             self.inventory.remove("abbey-light")
@@ -137,4 +136,4 @@ class Inventory:
                 return output        
             
             case _: #default case
-                raise ValueError("invalid rotation value in rotatePiece()")
+                raise ValueError(f"invalid rotation value in rotatePiece(), {rotation}")

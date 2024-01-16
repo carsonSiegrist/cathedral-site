@@ -14,9 +14,9 @@ def home():
 # API for starting a new game
 @app.route('/start_game', methods = ['POST'])
 def start_game():
+    global game
     game = Game()
-    game.start_game()
-    return 
+    return jsonify({"message": "Game started"})
 
 #API for getting the current board
 @app.route('/get_board', methods = ['GET'])
@@ -34,9 +34,13 @@ def play_move():
     if not game:
         raise RuntimeError("Game not started. Call /start_game first.")
     #Take user input from the request 
-    move_data = request.get_json()
+    try:
+        move_data = request.get_json()
+    except Exception as e:
+        print(f"Error processing move_data: {e}")
+        return jsonify({"error:" : "Invalid JSON data!"})
     game.play_move(move_data)
-    return
+    return jsonify({"message" : "Move successfully played"})
 
 if __name__ == '__main__':
     app.run(debug=True)

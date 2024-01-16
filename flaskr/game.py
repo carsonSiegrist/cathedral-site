@@ -15,7 +15,7 @@ class Game:
 
     #Create game object
     def __init__(self):
-        self.turn = 0
+        self.turn = 1
         self.player = 1
         self.board = Board()
         self.p1_inventory = Inventory(1)
@@ -34,13 +34,18 @@ class Game:
     def play_move(self, move):
 
         #open file
-        with open(move, 'r') as file:
-            move_data = json.load(file)
+        # with open(move, 'r') as file:
+        #     move_data = json.load(file)
         
-        #Extract data
-        piece_name = move_data["piece"]
-        rotation = move_data["rotation"]
-        coordinate = tuple(move_data["coordinate"]) 
+        # #Extract data
+        # piece_name = move_data["piece"]
+        # rotation = move_data["rotation"]
+        # coordinate = tuple(move_data["coordinate"]) 
+
+        piece_name = move["piece"]
+        rotation = int(move["rotation"])
+        coordinate = move["coordinate"]
+        coordinate =  tuple([int(coordinate[0]), int(coordinate[1])])
 
 
         #Special cases involving the cathedral
