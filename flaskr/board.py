@@ -287,32 +287,3 @@ class Board:
 
         return coordinates
 
-
-
-
-
-#Code for testing purposes #TODO: Delete 
-
-# is_playable(piece, coord, rotation, player)
-# play_piece(piece, coord, rotation, player, turn)
-
-
-# board = Board()
-# print(board)
-# board.play_piece("stable-1", (8, 1), 3, 1, 1)
-# print(board)
-# board.play_piece("infirmary", (5, 1), 2, 2, 2)
-# print(board)
-# board.play_piece("manor", (6, 2), 0, 1, 3)
-# print(board)
-# board.play_piece("bridge", (4, 2), 0, 2, 4)
-# print(board)
-# board.play_piece("castle", (9, 4), 0, 1, 5)
-# print(board)
-# board.play_piece("academy-dark", (4, 5), 0, 2, 6)
-# print(board)
-# board.play_piece("castle", (0, 5), 2, 1, 7)
-# print(board)
-# board.play_piece("abbey-dark", (3, 8), 1, 2, 8)
-# print(board)
-
