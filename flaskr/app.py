@@ -21,8 +21,11 @@ def start_game():
 #API for getting the current board
 @app.route('/get_board', methods = ['GET'])
 def get_board():
-    if not game:
-        raise RuntimeError("Game not started. Call /start_game first.")
+    try: 
+        if not game:
+            raise RuntimeError("Game not started. Call /start_game first.")
+    except RuntimeError as e:
+        return jsonify({"error" : str(e)})
     board = game.get_board()
     board_dict = {"board" : board.get_board_lst()}
     return jsonify(board_dict)
@@ -31,14 +34,16 @@ def get_board():
 #Returns current board state
 @app.route('/play_move', methods=['POST'])
 def play_move():
-    if not game:
-        raise RuntimeError("Game not started. Call /start_game first.")
     #Take user input from the request 
     try:
+        if not game:
+            raise RuntimeError("Game not started. Call /start_game first.")
         move_data = request.get_json()
-    except Exception as e:
+    
+    except RuntimeError as e:
         print(f"Error processing move_data: {e}")
-        return jsonify({"error:" : "Invalid JSON data!"})
+        return jsonify({"error:" : str(e)})
+    
     game.play_move(move_data)
     return jsonify({"message" : "Move successfully played"})
 

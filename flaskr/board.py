@@ -10,7 +10,10 @@ Including initializing board, updating board when play, and handling win conditi
 from enum import Enum
 from collections import deque
 from inventory import Inventory
-from copy import copy
+from copy import copy 
+
+debug = False #Enable for debugging messages
+
 
 class TileState(Enum):
     Unoccupied = 0
@@ -21,14 +24,15 @@ class TileState(Enum):
     Zoned_p2 = 5
 
 
-debug = False
-
-#state variable tracks if the tile is occupied by a piece, and who owns it, if it is unoccupied, or if it is player controlled.
-#piece variable tracks the name of the piece. 
+#Class for tracking each individual tile on the baord (i.e. 10x10 board has 100 tiles) 
 class Tile:
     #Default constructor, defaults state to unoccupied, piece to None. 
     def __init__(self, state = 0): 
+        
+        #state variable tracks if the tile is occupied by a piece, and who owns it, if it is unoccupied, or if it is player controlled.
         self.state = state
+        
+        #piece variable tracks the name of the piece. 
         self.piece = None 
 
     #Convert to string for debugging purposes
@@ -49,7 +53,7 @@ class Board:
 
     #Create a BOARD_SIZE * BOARD_SIZE matrix made of tile objects defaulted to be unoccupied
     def __init__(self): 
-        self.board = [[Tile(TileState.Unoccupied) for i in range(self.BOARD_SIZE)] for j in range(self.BOARD_SIZE)]
+        self.board = [[Tile(TileState.Unoccupied) for _ in range(self.BOARD_SIZE)] for _ in range(self.BOARD_SIZE)]
         
     #String representation of board for debugging
     #Prints each tile's current state in a BOARD_SIZE x BOARD_SIZE grid
@@ -72,10 +76,10 @@ class Board:
 
 
     #PRE: Valid move is provided as input
-    #POST: Board is updated to display piece  
+    #POST: Board is updated to display piece, list of captured pieces returned
     def play_piece(self, piece, coord, rotation, player, turn):
         #Does NOT validate moves. 
-        to_play = self.generate_coordinates(piece, coord, rotation)
+        to_play = self.generate_coordinates(piece, coord, rotation) #coordinates piece will occupy
 
         #Determine what to set tiles to 
         player_state = None
@@ -97,37 +101,37 @@ class Board:
             self.board[y][x].setState(player_state)            
             self.board[y][x].setPiece(piece)            
 
+
+
         #Players may NOT capture pieces during their first turn. (Cathedral cannot capture a piece either) 
-        #Don't bother checking for captures. 
-        if turn <= 3:
-            return
-
-        captures = self.find_captures(player)
+        #Don't bother checking for captures. (Would capture whole board)
+        if turn > 3:
+            captures = self.find_captures(player)
 
 
-        for capture in captures: 
+        captured_pieces = []
+        for capture, piece in captures: 
             if debug:
                 print(capture)
+            captured_pieces.append(piece)
             for x, y in capture: #list of captured coords
                 curr_tile = self.board[y][x]
                 curr_state = curr_tile.state
-                curr_piece = curr_tile.piece
+
 
                 #Piece should be returned to player's hand (unless its the Cathedral)
                 if curr_state in [TileState.Occupied_p1, TileState.Occupied_p2, TileState.Occupied_Cathedral]:
-                    if curr_piece != "cathedral":
-                        #TODO: Return curr_piece to enemy_player's hand
-                        pass
-                    curr_piece = None #remove piece from board
+                    curr_tile.piece = None #remove piece from board
 
                 curr_tile.setState(player_zone_state)
 
-        print(self.board)
-        return
+
+        return captured_pieces
     
     #Helper function to play_move
     #Finds all the captured spaces, returns them as a list of coordinates that have become captured. 
     #Does NOT update board or return captured pieces to their appropriate inventories. 
+    #Returns a list of tuples in the form (set of coordinates, captured_piece)
     def find_captures(self, player):
 
         #Only the player captures land
@@ -227,7 +231,7 @@ class Board:
                                 pass
 
                     if not found_enemy:
-                        capture = copy(curr_seen)
+                        capture = tuple(copy(curr_seen), pass_piece)
                         captures.append(capture)
 
                         if debug:
@@ -297,4 +301,3 @@ class Board:
                 row_lst.append([tile.state.value, tile.piece])
             out.append(row_lst)
         return out
-    

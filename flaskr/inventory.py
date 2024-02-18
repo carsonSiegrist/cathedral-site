@@ -69,6 +69,10 @@ class Inventory:
     def __len__(self):
         return len(self.inventory)
     
+    #return true if player has at least one piece, false othewise
+    def __bool__(self):
+        return len(self) > 0
+    
     
     #returns boolean, if player has the given piece
     def has_piece(self, piece):
