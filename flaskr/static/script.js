@@ -109,6 +109,7 @@ function printInventories(data){
         for(const piece of data.one){
             //creates a img element and sets the src to the correct image using getImageLight
             const pieceImage = document.createElement('img');
+            pieceImage.className = piece;
             pieceImage.setAttribute("draggable", "true");
             pieceImage.setAttribute("src", getImageLight(piece));
             pieceImage.setAttribute("style", "padding: 5px");
@@ -124,6 +125,7 @@ function printInventories(data){
         for(const piece of data.two){
             //creates a div element and calls it piece it then places the piece name into the div and appends that to the inventory div
             const pieceImage = document.createElement('img');
+            pieceImage.className = piece;
             pieceImage.setAttribute("draggable", "true");
             pieceImage.setAttribute("src", getImageDark(piece));
             pieceImage.setAttribute("style", "padding: 5px");
@@ -226,4 +228,70 @@ function getImageDark(piece){
         case 'academy-dark':
             return "static/images/academy_dark.png";
     }
+}
+
+document.querySelector(".board").addEventListener("dragover", function (event) {
+    event.preventDefault();
+});
+
+document.querySelector(".board").addEventListener("drop", function (event) {
+    event.preventDefault();
+    // Get the mouse position
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    // Convert mouse position to grid coordinates
+    const grid = document.querySelector(".board");
+    const rect = grid.getBoundingClientRect();
+    const x = mouseX - rect.left;
+    const y = mouseY - rect.top;
+
+    // Calculate the row and column
+    const row = Math.floor(y / (grid.clientHeight / 10));
+    const col = Math.floor(x / (grid.clientWidth / 10));
+
+
+    // Grab the link of the object dropped and parse it to get the name of the item
+    const draggedPieceName = event.dataTransfer.getData("text/plain");
+    let urlParts = draggedPieceName.split('/');
+    // Get the last part of the URL (which should be the filename)
+    let filenameWithExtension = urlParts[urlParts.length - 1];
+
+    // Remove the file extension (assuming it's always in the format "filename.extension")
+    let filenameWithoutExtension = filenameWithExtension.split('.')[0];
+    
+    
+
+    console.log("Piece: " + filenameWithoutExtension + " rotation val: " + rotate + " row: " + row + " column: " + col);
+});
+
+document.querySelector(".playerOne").addEventListener("mousedown", function (event){
+    // Grab the link of the object dropped and parse it to get the name of the item
+    const draggedPieceName = event.dataTransfer.getData("string");
+    let urlParts = draggedPieceName.split('/');
+    // Get the last part of the URL (which should be the filename)
+    let filenameWithExtension = urlParts[urlParts.length - 1];
+
+    // Remove the file extension (assuming it's always in the format "filename.extension")
+    let filenameWithoutExtension = filenameWithExtension.split('.')[0];
+
+    document.addEventListener('keydown', function (event){
+        if(event.key === 'r'){
+            rotateHandler();
+            const rotateImage = document.getElementsByClassName(filenameWithoutExtension);
+            rotateImage.style.transform = 'rotate(90deg)';
+        }
+    });
+});
+
+rotate = 0;
+
+function rotateHandler(){
+    rotate = (rotate + 1) % 4;
+
+
+}
+
+function dropHandler(piece, row, col){
+
 }
