@@ -9,53 +9,35 @@
 
 </head>
 <body>
-    
-    <label for = "xCord">X-cord</label>
-    <input type = "number" id = "xCord" name = "xCord" min = "0" max = "9">
+    <!--
+        the container will be graphed using css graphs.
+        *more detailed notes in css file*
+    -->
+    <div class = "container">
+        <!--will be the title / header for the website-->
+        <div class = "header"><h1>Cathedral</h1></div>
 
-    <br>
-    <label for = "yCord">Y-cord</label>
-    <input type = "number" id = "yCord" name = "yCord" min = "0" max = "9">
+        <!--will be Player one's inventory-->
+        <div class = "playerOne" id = "playerOne">
+            <h3>Player One</h3>
+            
+        </div>
 
-    <br>
-    <label for = "Piece"> Select a Piece</label>
-    <select id = "Piece">
-        <option disabled hidden selected> Select </option>
-        <option value = "tavern-1">tavern-1</option>
-        <option value = "tavern-2">tavern-2</option>
-        <option value = "stable-1">stable-1</option>
-        <option value = "stable-2">stable-2</option>
-        <option value = "inn-1">inn-1</option>
-        <option value = "inn-2">inn-2</option>
-        <option value = "bridge">bridge</option>
-        <option value = "square">square</option>
-        <option value = "abbey-dark">abbey-dark</option>
-        <option value = "abbey-light">abbey-light</option>
-        <option value = "manor">manor</option>
-        <option value = "tower">tower</option>
-        <option value = "infirmary">infirmary</option>
-        <option value = "castle">castle</option>
-        <option value = "academy-dark">academy-dark</option>
-        <option value = "academy-light">academy-light</option>
-        <option value = "cathedral">cathedral</option>
-    </select>
-    <br>
-    <label for = "rotation">Rotation value</label>
-    <select id = "rotation">
-        <option disabled hidden selected> Select </option>
-        <option value = "0">0</option>
-        <option value = "1">1</option>
-        <option value = "2">2</option>
-        <option value = "3">3</option>
-    </select>
-    
-    <br>
-    <button onclick = "onClick()"> play </button>
-    <button onclick = "boardClick()"> get-board </button>
+        <!--will be the board of the game and will display pieces played-->
+        <div class = "board" id = "board">
+            
+            
+            
+        </div>
 
-    <table class = "table" id = "table">
+        <!--will be Player Two's inventory-->
+        <div class = "playerTwo" id = "playerTwo">
+            <h3>Player Two</h3>
+        </div>
 
-    </table>
+        <!--will display info about how to play the game and credits to the creator of the game-->
+        <div class = "info">Info</div>
+    </div>
     <script src = "{{ url_for('static', filename = 'script.js') }}"></script>
 </body>
 </html>
