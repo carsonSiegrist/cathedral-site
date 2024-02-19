@@ -58,7 +58,16 @@ def get_inventories():
     return jsonify({1 : game.p1_inventory.inventory,
                     2 : game.p2_inventory.inventory})
 
+#Route for requesting whose turn it is
+@app.route('/get_player', methods=['GET'])
+def get_player():
 
+    #Check there is an active game
+    if not game:
+        print(f"Error: Game has not been started. Call /start_game first.")
+        return jsonify({"error":"Game not started. Call /start_game first."})
+    
+    return jsonify({"player" : game.player})
 
 if __name__ == '__main__':
     app.run(debug=True)
