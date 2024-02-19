@@ -9,53 +9,47 @@
 
 </head>
 <body>
-    
-    <label for = "xCord">X-cord</label>
-    <input type = "number" id = "xCord" name = "xCord" min = "0" max = "9">
+    <!--
+        the container will be graphed using css graphs.
+        *more detailed notes in css file*
+    -->
+    <div class = "container">
+        <!--will be the title / header for the website-->
+        <div class = "header"><h1>Cathedral</h1></div>
 
-    <br>
-    <label for = "yCord">Y-cord</label>
-    <input type = "number" id = "yCord" name = "yCord" min = "0" max = "9">
+        <!--will be Player one's inventory-->
+        <div class = "playerOne" id = "playerOne">
+            <h3>Player One</h3>
+        </div>
 
-    <br>
-    <label for = "Piece"> Select a Piece</label>
-    <select id = "Piece">
-        <option disabled hidden selected> Select </option>
-        <option value = "tavern-1">tavern-1</option>
-        <option value = "tavern-2">tavern-2</option>
-        <option value = "stable-1">stable-1</option>
-        <option value = "stable-2">stable-2</option>
-        <option value = "inn-1">inn-1</option>
-        <option value = "inn-2">inn-2</option>
-        <option value = "bridge">bridge</option>
-        <option value = "square">square</option>
-        <option value = "abbey-dark">abbey-dark</option>
-        <option value = "abbey-light">abbey-light</option>
-        <option value = "manor">manor</option>
-        <option value = "tower">tower</option>
-        <option value = "infirmary">infirmary</option>
-        <option value = "castle">castle</option>
-        <option value = "academy-dark">academy-dark</option>
-        <option value = "academy-light">academy-light</option>
-        <option value = "cathedral">cathedral</option>
-    </select>
-    <br>
-    <label for = "rotation">Rotation value</label>
-    <select id = "rotation">
-        <option disabled hidden selected> Select </option>
-        <option value = "0">0</option>
-        <option value = "1">1</option>
-        <option value = "2">2</option>
-        <option value = "3">3</option>
-    </select>
-    
-    <br>
-    <button onclick = "onClick()"> play </button>
-    <button onclick = "boardClick()"> get-board </button>
+        <!--will be the board of the game and will display pieces played-->
+        <div class = "board" id = "board">
+            
+            
+            
+        </div>
 
-    <table class = "table" id = "table">
+        <!--will be Player Two's inventory-->
+        <div class = "playerTwo" id = "playerTwo">
+            <h3>Player Two</h3>
+        </div>
 
-    </table>
-    <script src = "{{ url_for('static', filename = 'script.js') }}"></script>
+        <!--will display info about how to play the game and credits to the creator of the game-->
+        <div class = "info">Info</div>
+        <p>CATHEDRAL is a two player board game based around a battle for supremacy between two political factions (dark and light) within the walls of a Mediaeval City. For centuries man has struggled with man for territorial space and when the struggle was won, played games to pass away the interlude.CATHEDRAL represents one of these struggles.
+
+            The city is represented by a 10x10 grid square area surrounded by, parapets (walls) and towers in the style of an ancient defended city. The occupants farm and work outside the city and at night, or during a threat, they retreated to the safety of the city walls. The city is cramped and peasants and lords alike squabble amongst each other to find room in the city. Having carved out a space they are not satisfied and continue to take up residence in other unclaimed space available, and so the battle continues.
+            
+            cathedral_cream_90px.gif (4048 bytes)
+            
+            The game begins when a player places the Cathedral anywhere in the city, but aligned with the squares. Your objective in CATHEDRAL is to occupy as much space as possible, by then taking turns placing your buildings into the city and preventing your opponent from succeeding by carving off pieces of land called DEDICATING SPACE. A space once surrounded completely by your buildings cannot be occupied by your opponent, the wall may also form part of your capture. The more space you hold the less chance your opponent has to fit their buildings in the city, especially the larger odd shaped pieces.
+            
+            The winner is the player who places all or most of their buildings within the city. If neither player fully succeeds in doing this, then the winner is determined by counting up the number of squares the remaining pieces would cover and the lowest score wins. An even number of games makes for a fair match.
+            
+            Cathedral takes a short time to learn but a lifetime to master. Each game is limited to 20 moves per player and takes about 20-30 minutes. Playing a set of games over a period of time is the best way to get maximum fun and enjoyment.
+            
+            Cathedral is Copyright Chrisbo I.P. Holdings Limited</p>
+    </div>
+    <script src = "static/script.js"></script>
 </body>
 </html>
