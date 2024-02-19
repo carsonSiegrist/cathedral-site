@@ -279,6 +279,8 @@ class Board:
         
         #No errors found, acceptable play
         return True
+    
+    
             
     #Converts relative piece coordinates to actual coordinates on the board.
     #POST: Returns -1 if coordinates cannot be generated, otherwise returns a list of coordinates stored as tuples. 

@@ -39,12 +39,13 @@ def play_move():
         
         #Take user input from the request 
         move_data = request.get_json()
-    
+        out = game.play_move(move_data)
+
     except RuntimeError as e:
         print(f"Error processing move_data: {e}")
         return jsonify({"error:" : str(e)})
     
-    return game.play_move(move_data)
+    return out
 
 
 @app.route('/get_inventories', methods=['GET'])
