@@ -22,15 +22,6 @@ getInventories();
 
 
 
-
-
-
-
-
-
-
-
-
 //fetches the board from app.py
 function getBoard(){
     //requests a promise from get_board
@@ -108,23 +99,131 @@ function printBoard(data){
           }
 }
 
+
+//prints the inventories of the players
 function printInventories(data){
+    //creating a object that allows us to write to the playerOne div in hmtl
     let inventoryOne = document.querySelector("playerOne");
 
+        //for each element in the players inventories, we write the name of the piece to player ones inventory
         for(const piece of data.one){
-            const piecePlacer = document.createElement('div');
-            piecePlacer.className = 'piece';
-            piecePlacer.append(piece);
-            playerOne.appendChild(piecePlacer);
+            //creates a img element and sets the src to the correct image using getImageLight
+            const pieceImage = document.createElement('img');
+            pieceImage.setAttribute("draggable", "true");
+            pieceImage.setAttribute("src", getImageLight(piece));
+            pieceImage.setAttribute("style", "padding: 5px");
+            
+            playerOne.appendChild(pieceImage);
+            
         }
-        
+    
+    //creating a object that allows us to write to the playerTwo div in hmtl
     let inventoryTwo = document.querySelector("playerTwo");
 
+        //for each element in the players inventories, we write the name of the piece to player ones inventory
         for(const piece of data.two){
-            const piecePlacer = document.createElement('div');
-            piecePlacer.className = 'piece';
-            piecePlacer.append(piece);
-            playerTwo.appendChild(piecePlacer);
+            //creates a div element and calls it piece it then places the piece name into the div and appends that to the inventory div
+            const pieceImage = document.createElement('img');
+            pieceImage.setAttribute("draggable", "true");
+            pieceImage.setAttribute("src", getImageDark(piece));
+            pieceImage.setAttribute("style", "padding: 5px");
+            playerTwo.appendChild(pieceImage);
         }
 }
 
+
+
+function getImageLight(piece){
+    switch(piece){
+        case 'tavern-1':
+            return "static/images/tavern_light.png";
+
+        case 'tavern-2':
+            return "static/images/tavern_light.png";
+
+        case 'stable-1':
+            return "static/images/stable_light.png";
+
+        case 'stable-2':
+            return "static/images/stable_light.png";
+
+        case 'inn-1':
+            return "static/images/inn_light.png";
+
+        case 'inn-2':
+            return "static/images/inn_light.png";
+
+        case 'bridge':
+            return "static/images/bridge_light.png";
+
+        case 'square':
+            return "static/images/square_light.png";
+
+        case 'abbey-light':
+            return "static/images/abbey_light.png";
+
+        case 'manor':
+            return "static/images/manor_light.png";
+
+        case 'tower':
+            return "static/images/tower_light.png";
+
+        case 'infirmary':
+            return "static/images/infirmary_light.png";
+
+        case 'castle':
+            return "static/images/castle_light.png";
+
+        case 'academy-light':
+            return "static/images/academy_light.png";
+
+        case 'cathedral':
+            return "static/images/cathedral.png";
+    }
+}
+
+function getImageDark(piece){
+    switch(piece){
+        case 'tavern-1':
+            return "static/images/tavern_dark.png";
+
+        case 'tavern-2':
+            return "static/images/tavern_dark.png";
+
+        case 'stable-1':
+            return "static/images/stable_dark.png";
+
+        case 'stable-2':
+            return "static/images/stable_dark.png";
+
+        case 'inn-1':
+            return "static/images/inn_dark.png";
+
+        case 'inn-2':
+            return "static/images/inn_dark.png";
+
+        case 'bridge':
+            return "static/images/bridge_dark.png";
+
+        case 'square':
+            return "static/images/square_dark.png";
+
+        case 'abbey-dark':
+            return "static/images/abbey_dark.png";
+
+        case 'manor':
+            return "static/images/manor_dark.png";
+
+        case 'tower':
+            return "static/images/tower_dark.png";
+
+        case 'infirmary':
+            return "static/images/infirmary_dark.png";
+
+        case 'castle':
+            return "static/images/castle_dark.png";
+
+        case 'academy-dark':
+            return "static/images/academy_dark.png";
+    }
+}

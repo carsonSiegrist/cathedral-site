@@ -56,8 +56,8 @@ def get_inventories():
         return jsonify({"error":"Game not started. Call /start_game first."})
     
     inventory_dict = {
-        "one": list(game.p1_inventory.inventory),
-        "two": list(game.p2_inventory.inventory)
+        "one": sorted(list(game.p1_inventory.inventory)),
+        "two": sorted(list(game.p2_inventory.inventory))
     }
 
     return jsonify(inventory_dict)
