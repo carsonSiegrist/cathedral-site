@@ -39,12 +39,13 @@ def play_move():
         
         #Take user input from the request 
         move_data = request.get_json()
-    
+        out = game.play_move(move_data)
+
     except RuntimeError as e:
         print(f"Error processing move_data: {e}")
         return jsonify({"error:" : str(e)})
     
-    return game.play_move(move_data)
+    return out
 
 
 @app.route('/get_inventories', methods=['GET'])
@@ -62,7 +63,16 @@ def get_inventories():
 
     return jsonify(inventory_dict)
 
+#Route for requesting whose turn it is
+@app.route('/get_player', methods=['GET'])
+def get_player():
 
+    #Check there is an active game
+    if not game:
+        print(f"Error: Game has not been started. Call /start_game first.")
+        return jsonify({"error":"Game not started. Call /start_game first."})
+    
+    return jsonify({"player" : game.player})
 
 if __name__ == '__main__':
     app.run(debug=True)
