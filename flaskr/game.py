@@ -91,7 +91,7 @@ class Game:
         #Look at correct inventory
         p_inv = self.p1_inventory if self.player == 1 else self.p2_inventory 
 
-        for p in p_inv: #piece 
+        for p in p_inv.inventory: #piece 
             for r, row in enumerate(self.board.board):
                 for c, tile in enumerate(row):
                     for rotation in range(4): #rotation 

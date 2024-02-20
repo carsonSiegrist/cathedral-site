@@ -105,15 +105,18 @@ class Board:
 
         #Players may NOT capture pieces during their first turn. (Cathedral cannot capture a piece either) 
         #Don't bother checking for captures. (Would capture whole board)
+        captures = []
         if turn > 3:
             captures = self.find_captures(player)
 
 
-        captured_pieces = []
+        captured_pieces = set()
+
+        #Add each captured piece to captured pieces
         for capture, piece in captures: 
             if debug:
                 print(capture)
-            captured_pieces.append(piece)
+            captured_pieces.add(piece)
             for x, y in capture: #list of captured coords
                 curr_tile = self.board[y][x]
                 curr_state = curr_tile.state
@@ -126,7 +129,7 @@ class Board:
                 curr_tile.setState(player_zone_state)
 
 
-        return captured_pieces
+        return list(captured_pieces)
     
     #Helper function to play_move
     #Finds all the captured spaces, returns them as a list of coordinates that have become captured. 

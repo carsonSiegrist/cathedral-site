@@ -18,10 +18,6 @@ getBoard();
 getInventories();
 
 
-
-
-
-
 //fetches the board from app.py
 function getBoard(){
     //requests a promise from get_board
@@ -77,13 +73,13 @@ function onClick(){
 
 //clears the board
 function clearBoard(){
-    let table = document.querySelector("table");
+    let table = document.querySelector(".board");
     table.innerHTML = '';
 }
 
 //prints the board
 function printBoard(data){
-    let table = document.querySelector("board"); // gets the table class from the html file and turns it into an object
+    let table = document.querySelector(".board"); // gets the table class from the html file and turns it into an object
     
         
         for (const outerList of data.board) {
@@ -134,26 +130,23 @@ function printInventories(data){
 }
 
 
-
+//finds correct image link corresponding to piece name
 function getImageLight(piece){
     switch(piece){
         case 'tavern-1':
-            return "static/images/tavern_light.png";
-
+            return "static/images/tavern_light_1.png";
         case 'tavern-2':
-            return "static/images/tavern_light.png";
+            return "static/images/tavern_light_2.png";
 
         case 'stable-1':
-            return "static/images/stable_light.png";
-
+            return "static/images/stable_light_1.png";
         case 'stable-2':
-            return "static/images/stable_light.png";
+            return "static/images/stable_light_2.png";
 
         case 'inn-1':
-            return "static/images/inn_light.png";
-
+            return "static/images/inn_light_1.png";
         case 'inn-2':
-            return "static/images/inn_light.png";
+            return "static/images/inn_light_2.png";
 
         case 'bridge':
             return "static/images/bridge_light.png";
@@ -187,22 +180,19 @@ function getImageLight(piece){
 function getImageDark(piece){
     switch(piece){
         case 'tavern-1':
-            return "static/images/tavern_dark.png";
-
+            return "static/images/tavern_dark_1.png";
         case 'tavern-2':
-            return "static/images/tavern_dark.png";
+            return "static/images/tavern_dark_2.png";
 
         case 'stable-1':
-            return "static/images/stable_dark.png";
-
+            return "static/images/stable_dark_1.png";
         case 'stable-2':
-            return "static/images/stable_dark.png";
+            return "static/images/stable_dark_2.png";
 
         case 'inn-1':
-            return "static/images/inn_dark.png";
-
+            return "static/images/inn_dark_1.png";
         case 'inn-2':
-            return "static/images/inn_dark.png";
+            return "static/images/inn_dark_2.png";
 
         case 'bridge':
             return "static/images/bridge_dark.png";
@@ -230,6 +220,8 @@ function getImageDark(piece){
     }
 }
 
+
+
 document.querySelector(".board").addEventListener("dragover", function (event) {
     event.preventDefault();
 });
@@ -253,45 +245,125 @@ document.querySelector(".board").addEventListener("drop", function (event) {
 
     // Grab the link of the object dropped and parse it to get the name of the item
     const draggedPieceName = event.dataTransfer.getData("text/plain");
+    
     let urlParts = draggedPieceName.split('/');
     // Get the last part of the URL (which should be the filename)
-    let filenameWithExtension = urlParts[urlParts.length - 1];
-
-    // Remove the file extension (assuming it's always in the format "filename.extension")
-    let filenameWithoutExtension = filenameWithExtension.split('.')[0];
-    
+    let fileNameWithExtension = urlParts[urlParts.length - 1];
     
 
-    console.log("Piece: " + filenameWithoutExtension + " rotation val: " + rotate + " row: " + row + " column: " + col);
+    console.log("Piece: " + fileNameWithExtension + " rotation val: " + 0 + " row: " + row + " column: " + col);
+
+    let pieceData = {
+        piece: getImageInfo(fileNameWithExtension),
+        rotation: 0,
+        coordinate: [col,row]
+    }
+    
+
+    //posts the player information to app.py
+    fetch('/play_move', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(pieceData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            clearBoard();
+            getBoard();
+           
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 });
 
-document.querySelector(".playerOne").addEventListener("mousedown", function (event){
-    // Grab the link of the object dropped and parse it to get the name of the item
-    const draggedPieceName = event.dataTransfer.getData("string");
-    let urlParts = draggedPieceName.split('/');
-    // Get the last part of the URL (which should be the filename)
-    let filenameWithExtension = urlParts[urlParts.length - 1];
+//finds correct piece name corresponding to image link
+function getImageInfo(piece){
+    switch(piece){
+        case 'tavern_light_1.png':
+            return "tavern-1";
+        case 'taver_light_2.png':
+            return "tavern-2";
 
-    // Remove the file extension (assuming it's always in the format "filename.extension")
-    let filenameWithoutExtension = filenameWithExtension.split('.')[0];
+        case 'stable_light_1.png':
+            return "stable-1";
+        case 'stable_light_2.png':
+            return "stable-2";
 
-    document.addEventListener('keydown', function (event){
-        if(event.key === 'r'){
-            rotateHandler();
-            const rotateImage = document.getElementsByClassName(filenameWithoutExtension);
-            rotateImage.style.transform = 'rotate(90deg)';
-        }
-    });
-});
+        case 'inn_light_1.png"':
+            return "inn-1";
+        case 'inn_light_2.png"':
+            return "inn-2";
 
-rotate = 0;
+        case 'bridge_light.png':
+            return "bridge";
 
-function rotateHandler(){
-    rotate = (rotate + 1) % 4;
+        case 'square_light.png':
+            return "square";
+
+        case 'abbey_light.png':
+            return "abbey-light";
+
+        case 'manor_light.png':
+            return "manor";
+
+        case 'tower_light.png':
+            return "tower";
+
+        case 'infirmary_light.png':
+            return "infirmary";
+
+        case 'castle_light.png':
+            return "castle";
+
+        case 'academy_light.png':
+            return "academy-light";
+
+        case 'cathedral.png':
+            return "cathedral";
 
 
-}
 
-function dropHandler(piece, row, col){
+        case 'tavern_dark_1.png':
+            return "tavern-1";
+        case 'taver_dark_2.png':
+            return "tavern-2";
 
+        case 'stable_dark_1.png':
+            return "stable-1";
+        case 'stable_dark_2.png':
+            return "stable-2";
+
+        case 'inn_dark_1.png"':
+            return "inn-1";
+        case 'inn_dark_2.png"':
+            return "inn-2";
+
+        case 'bridge_dark.png':
+            return "bridge";
+
+        case 'square_dark.png':
+            return "square";
+
+        case 'abbey_dark.png':
+            return "abbey-dark";
+
+        case 'manor_dark.png':
+            return "manor";
+
+        case 'tower_dark.png':
+            return "tower";
+
+        case 'infirmary_dark.png':
+            return "infirmary";
+
+        case 'castle_dark.png':
+            return "castle";
+
+        case 'academy_dark.png':
+            return "academy-dark";
+    }
 }
