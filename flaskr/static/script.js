@@ -75,10 +75,12 @@ function onClick(){
 function clearBoard(){
     let table = document.querySelector(".board");
     table.innerHTML = '';
+    console.log("Cleared board");
 }
 
 //prints the board
 function printBoard(data){
+    console.log(data);
     let table = document.querySelector(".board"); // gets the table class from the html file and turns it into an object
     
         
@@ -88,19 +90,38 @@ function printBoard(data){
               // Iterate through each element in the inner list
                 const square = document.createElement('div');//creates a div html object
                 square.className = 'table-item';//sets the class name of the div
-                square.append(innerList[0]);//adds the value of the square into the html
+                if(innerList[0] == 1){
+                    square.style.backgroundColor = "grey";
+                }
+                else if(innerList[0] == 2){
+                    square.style.backgroundColor = "rgb(233, 177, 131)";
+                }
+                else if(innerList[0] == 3){
+                    square.style.backgroundColor = "rgb(53, 26, 4)";
+                }
+                //adds the value of the square into the html
                 board.appendChild(square);//sends the div obj to the html file to be inserted
                 // Perform your actions with each element here
             }
           }
 }
 
+//clears the inventories of the players
+function clearInventories(){
+    let InventoryOne = document.querySelector(".playerOne");
+    InventoryOne.innerHTML = '';
 
+    let InventoryTwo = document.querySelector(".playerTwo");
+    InventoryTwo.innerHTML = '';
+
+    console.log("Cleared inventories");
+}
 //prints the inventories of the players
 function printInventories(data){
     //creating a object that allows us to write to the playerOne div in hmtl
     let inventoryOne = document.querySelector("playerOne");
-
+    let inventoryOneName = document.querySelector(".playerOne");
+    inventoryOneName.innerHTML = '<h3>Player One</h3>';
         //for each element in the players inventories, we write the name of the piece to player ones inventory
         for(const piece of data.one){
             //creates a img element and sets the src to the correct image using getImageLight
@@ -116,7 +137,8 @@ function printInventories(data){
     
     //creating a object that allows us to write to the playerTwo div in hmtl
     let inventoryTwo = document.querySelector("playerTwo");
-
+    let inventoryTwoName = document.querySelector(".playerTwo");
+    inventoryTwoName.innerHTML = '<h3>Player Two</h3>';
         //for each element in the players inventories, we write the name of the piece to player ones inventory
         for(const piece of data.two){
             //creates a div element and calls it piece it then places the piece name into the div and appends that to the inventory div
@@ -273,7 +295,8 @@ document.querySelector(".board").addEventListener("drop", function (event) {
             console.log(data);
             clearBoard();
             getBoard();
-           
+            clearInventories();
+            getInventories();
         })
         .catch(error => {
             console.error('Error:', error);
