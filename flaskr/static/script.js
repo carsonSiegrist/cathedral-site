@@ -43,33 +43,6 @@ function getInventories(){
     })
     .catch(error => console.log(error));
 }
-//this runs when the play button is pressed
-function onClick(){
-    //this gets the data from the dropdown menus
-    let pieceData = {
-        piece: document.getElementById('Piece').value,
-        rotation: document.getElementById('rotation').value,
-        coordinate: [document.getElementById('xCord').value, document.getElementById('yCord').value]
-    }
-    
-
-    //posts the player information to app.py
-    fetch('/play_move', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(pieceData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    
-}
 
 //clears the board
 function clearBoard(){
@@ -99,6 +72,8 @@ function printBoard(data){
                 else if(innerList[0] == 3){
                     square.style.backgroundColor = "rgb(53, 26, 4)";
                 }
+
+                
                 //adds the value of the square into the html
                 board.appendChild(square);//sends the div obj to the html file to be inserted
                 // Perform your actions with each element here
@@ -116,6 +91,7 @@ function clearInventories(){
 
     console.log("Cleared inventories");
 }
+
 //prints the inventories of the players
 function printInventories(data){
     //creating a object that allows us to write to the playerOne div in hmtl
@@ -248,22 +224,82 @@ document.querySelector(".board").addEventListener("dragover", function (event) {
     event.preventDefault();
 });
 
+let mouseX = 0;
+let mouseY = 0;
+let rotation = 0;
+
+function onDrag(event) {
+    if (event.shiftKey) {
+        
+        rotatePiece();
+    }
+}
+
+// Add mousemove event listener to the board to track mouse position
+document.querySelector(".board").addEventListener("mousemove", function(event) {
+    // Update mouse coordinates relative to the board
+    const boardRect = event.currentTarget.getBoundingClientRect();
+    mouseX = event.clientX - boardRect.left + window.scrollX;
+    mouseY = event.clientY - boardRect.top + window.scrollY;
+});
+
+function updateBoardSize() {
+    // Get the container element
+    const container = document.querySelector(".container");
+    
+    // Get the width of the container
+    const containerWidth = container.clientWidth;
+
+    // Calculate the width and height of the grid area based on the column and row spans
+    const gridAreaWidth = (containerWidth / 4) * 2; // Assuming 2 columns in the middle
+    const gridAreaHeight = gridAreaWidth; // Assuming 1 row in the middle
+
+    // Set the width and height of the board to match the grid area size
+    const board = document.querySelector(".board");
+    board.style.width = gridAreaWidth + "px";
+    board.style.height = gridAreaHeight + "px";
+}
+
+// Call the updateBoardSize function when the page loads and whenever the window is resized
+window.addEventListener("load", updateBoardSize);
+window.addEventListener("resize", updateBoardSize);
+
+
+document.addEventListener('keydown', function(event) {
+    // Check if the pressed key is 'r'
+    if (event.key === 'r') {
+        rotatePiece();
+    }
+});
+
+
+// Add drop event listener to the board
+// Add drop event listener to the board
 document.querySelector(".board").addEventListener("drop", function (event) {
     event.preventDefault();
-    // Get the mouse position
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
+    
+    // Get the board element
+    const board = document.querySelector(".board");
+    
+    // Get the bounding rectangle of the board
+    const boardRect = board.getBoundingClientRect();
+    
+    // Calculate the dimensions of each cell
+    const cellWidth = board.clientWidth / 10; // Assuming 10 columns
+    const cellHeight = board.clientHeight / 10; // Assuming 10 rows
+    
+    // Calculate the mouse coordinates relative to the board
+    const mouseX = event.clientX - boardRect.left;
+    const mouseY = event.clientY - boardRect.top;
+    
+    // Calculate the row and column indices
+    const col = Math.floor(mouseX / cellWidth);
+    const row = Math.floor(mouseY / cellHeight);
 
-    // Convert mouse position to grid coordinates
-    const grid = document.querySelector(".board");
-    const rect = grid.getBoundingClientRect();
-    const x = mouseX - rect.left;
-    const y = mouseY - rect.top;
-
-    // Calculate the row and column
-    const row = Math.floor(y / (grid.clientHeight / 10));
-    const col = Math.floor(x / (grid.clientWidth / 10));
-
+    console.log("MouseX: " + mouseX + " MouseY: " + mouseY);
+    console.log("BoardRect: ", boardRect);
+    console.log("CellWidth: " + cellWidth + " CellHeight: " + cellHeight);
+    console.log("Calculated Row: " + row + " Calculated Column: " + col);
 
     // Grab the link of the object dropped and parse it to get the name of the item
     const draggedPieceName = event.dataTransfer.getData("text/plain");
@@ -272,16 +308,14 @@ document.querySelector(".board").addEventListener("drop", function (event) {
     // Get the last part of the URL (which should be the filename)
     let fileNameWithExtension = urlParts[urlParts.length - 1];
     
-
     console.log("Piece: " + fileNameWithExtension + " rotation val: " + 0 + " row: " + row + " column: " + col);
 
     let pieceData = {
         piece: getImageInfo(fileNameWithExtension),
-        rotation: 0,
-        coordinate: [col,row]
+        rotation: rotation,
+        coordinate: [col, row]
     }
     
-
     //posts the player information to app.py
     fetch('/play_move', {
         method: 'POST',
@@ -303,6 +337,12 @@ document.querySelector(".board").addEventListener("drop", function (event) {
         });
 });
 
+function rotatePiece(){
+    if(rotation == 3)
+            rotation = 0;
+        else
+            rotation++;
+}
 //finds correct piece name corresponding to image link
 function getImageInfo(piece){
     switch(piece){
